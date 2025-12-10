@@ -6,8 +6,9 @@ import java.util.List;
 
 public interface FruitService {
 	FruitDTO addFruit(FruitDTO newFruitDTO);
-	FruitDTO getFruitById(long id);
 	List<FruitDTO> getAllFruits();
+	List<FruitDTO> getFruitsByProviderId(Long providerId);
+	FruitDTO getFruitById(long id);
 	FruitDTO updateFruitById(long id, FruitDTO newFruitDTO);
 	void deleteFruitById(long id);
 }

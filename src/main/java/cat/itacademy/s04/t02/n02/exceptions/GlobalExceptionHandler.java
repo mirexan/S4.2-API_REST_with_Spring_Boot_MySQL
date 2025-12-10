@@ -11,4 +11,8 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> handleFruitNotFoundException(FruitNotFoundException ex){
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 	}
+	@ExceptionHandler(ProviderNotFoundException.class)
+	public ResponseEntity<String> handleProviderNotFoundException(ProviderNotFoundException ex){
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+	}
 }

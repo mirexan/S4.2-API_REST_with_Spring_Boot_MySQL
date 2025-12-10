@@ -1,8 +1,10 @@
-package cat.itacademy.s04.t02.n01.controllers;
+package cat.itacademy.s04.t02.n02.controllers;
 
-import cat.itacademy.s04.t02.n01.exceptions.FruitNotFoundException;
-import cat.itacademy.s04.t02.n01.model.FruitDTO;
-import cat.itacademy.s04.t02.n01.services.FruitService;
+import cat.itacademy.s04.t02.n02.exceptions.FruitNotFoundException;
+import cat.itacademy.s04.t02.n02.model.FruitDTO;
+import cat.itacademy.s04.t02.n02.model.Provider;
+import cat.itacademy.s04.t02.n02.model.ProviderDTO;
+import cat.itacademy.s04.t02.n02.services.FruitService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,14 +33,14 @@ public class FruitControllerTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		fruitDTO = new FruitDTO(1L, "Melon", 2);
+		fruitDTO = new FruitDTO(1L, "Melon", 2,1L);
 	}
 
 	@Test
 	void newFruitRegister_ShouldReturnOK_WhenDataIsValid() throws Exception {
-		FruitDTO newFruitDTO = new FruitDTO(null, "Apple", 2);
+		FruitDTO newFruitDTO = new FruitDTO(null, "Apple", 2,1L);
 		Mockito.when(fruitService.addFruit(Mockito.any(FruitDTO.class)))
-				.thenReturn(new FruitDTO(1L, "Apple", 2));
+				.thenReturn(new FruitDTO(1L, "Apple", 2,1L));
 		mockMvc.perform(post("/fruits")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(newFruitDTO)))
@@ -48,7 +50,7 @@ public class FruitControllerTest {
 
 	@Test
 	void newFruitRegister_ShouldReturnBadRequest_WhenDataIsNotValid() throws Exception {
-		FruitDTO newFruitDTO = new FruitDTO(null, null, -2);
+		FruitDTO newFruitDTO = new FruitDTO(null, null, -2,1L);
 		mockMvc.perform(post("/fruits")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(newFruitDTO)))
@@ -84,7 +86,7 @@ public class FruitControllerTest {
 
 	@Test
 	void updateExistingFruit_ShouldReturnOk_WhenDataIsValid() throws Exception {
-		FruitDTO newWeigthFruitDTO = new FruitDTO(fruitDTO.id(), fruitDTO.name(), 5);
+		FruitDTO newWeigthFruitDTO = new FruitDTO(fruitDTO.id(), fruitDTO.name(), 5, fruitDTO.providerId());
 		Mockito.when(fruitService.updateFruitById(Mockito.eq(1L), Mockito.any(FruitDTO.class)))
 				.thenReturn(newWeigthFruitDTO);
 		mockMvc.perform(put("/fruits/{id}", 1L)
@@ -96,7 +98,7 @@ public class FruitControllerTest {
 
 	@Test
 	void updateExistingFruit_ShouldReturnBadRequest_WhenDataIsNotValid() throws Exception {
-		FruitDTO newWeigthFruitDTO = new FruitDTO(fruitDTO.id(), fruitDTO.name(), -5);
+		FruitDTO newWeigthFruitDTO = new FruitDTO(fruitDTO.id(), fruitDTO.name(), -5, fruitDTO.providerId());
 		Mockito.when(fruitService.updateFruitById(Mockito.eq(1L), Mockito.any(FruitDTO.class)))
 				.thenReturn(newWeigthFruitDTO);
 		mockMvc.perform(put("/fruits/{id}", 1L)
@@ -106,7 +108,7 @@ public class FruitControllerTest {
 	}
 	@Test
 	void updateExistingFruit_ShouldReturnNotFound_WhenDataDoesNotExist() throws Exception {
-		FruitDTO newWeigthFruitDTO = new FruitDTO(fruitDTO.id(), fruitDTO.name(), 5);
+		FruitDTO newWeigthFruitDTO = new FruitDTO(fruitDTO.id(), fruitDTO.name(), 5, fruitDTO.providerId());
 		Mockito.when(fruitService.updateFruitById(Mockito.eq(1L), Mockito.any(FruitDTO.class)))
 				.thenThrow(new FruitNotFoundException("Does not exist"));
 		mockMvc.perform(put("/fruits/{id}", 1L)

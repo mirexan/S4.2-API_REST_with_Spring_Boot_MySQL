@@ -24,7 +24,10 @@ public class FruitController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedFruit);
 	}
 	@GetMapping
-	public ResponseEntity<List<FruitDTO>> getAllFruitsController(){
+	public ResponseEntity<List<FruitDTO>> getAllFruitsController(@RequestParam(name = "providerId",required = false) Long providerId){
+		if(providerId!=null){
+			return ResponseEntity.ok(fruitService.getFruitsByProviderId(providerId));
+		}
 		return ResponseEntity.status(HttpStatus.OK).body(fruitService.getAllFruits());
 	}
 	@GetMapping("/{id}")
