@@ -19,4 +19,8 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> handleDuplicateProviderName(DuplicateProviderName ex){
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 	}
+	@ExceptionHandler(ProviderHasFruitsException.class)
+	public ResponseEntity<String> handleProviderHasFruitsException(ProviderHasFruitsException ex){
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+	}
 }

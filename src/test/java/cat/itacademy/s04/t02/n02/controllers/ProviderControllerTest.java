@@ -1,6 +1,7 @@
 package cat.itacademy.s04.t02.n02.controllers;
 
 import cat.itacademy.s04.t02.n02.exceptions.DuplicateProviderName;
+import cat.itacademy.s04.t02.n02.exceptions.ProviderHasFruitsException;
 import cat.itacademy.s04.t02.n02.exceptions.ProviderNotFoundException;
 import cat.itacademy.s04.t02.n02.model.FruitDTO;
 import cat.itacademy.s04.t02.n02.model.ProviderDTO;
@@ -14,8 +15,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,5 +86,27 @@ public class ProviderControllerTest {
 						.content(objectMapper.writeValueAsString(newProviderDTO)))
 				.andExpect(status().isBadRequest());
 	}
-
+	@Test
+	void deleteProviderById_ShouldReturnNoContent_WhenIdExistsAndNoFruits() throws Exception {
+		Long providerId = 1L;
+		Mockito.doNothing().when(providerService).deleteProviderById(providerId);
+		mockMvc.perform(delete("/providers/{id}", providerId))
+				.andExpect(status().isNoContent());
+	}
+	@Test
+	void deleteProviderById_ShouldReturnNotFound_WhenIdDoesNotExists() throws Exception {
+		Long nonExistentId = 99L;
+		Mockito.doThrow(new ProviderNotFoundException("Provider not found"))
+				.when(providerService).deleteProviderById(nonExistentId);
+		mockMvc.perform(delete("/providers/{id}", nonExistentId))
+				.andExpect(status().isNotFound()); // Esperamos HTTP 404
+	}
+	@Test
+	void deleteProviderById_ShouldReturnBadRequest_WhenProviderHasFruits() throws Exception {
+		Long providerIdWithFruits = 5L;
+		Mockito.doThrow(new ProviderHasFruitsException("Cannot delete provider with fruits"))
+				.when(providerService).deleteProviderById(providerIdWithFruits);
+		mockMvc.perform(delete("/providers/{id}", providerIdWithFruits))
+				.andExpect(status().isBadRequest());
+	}
 }
