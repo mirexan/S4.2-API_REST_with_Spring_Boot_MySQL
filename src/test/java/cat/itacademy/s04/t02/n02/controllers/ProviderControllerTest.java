@@ -1,5 +1,6 @@
 package cat.itacademy.s04.t02.n02.controllers;
 
+import cat.itacademy.s04.t02.n02.exceptions.DuplicateProviderName;
 import cat.itacademy.s04.t02.n02.model.ProviderDTO;
 import cat.itacademy.s04.t02.n02.services.ProviderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,5 +40,15 @@ public class ProviderControllerTest {
 				.content(objectMapper.writeValueAsString(newProviderDTO)))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.country").value("Spain"));
+	}
+	@Test
+	void newProviderRegister_ShouldReturnBadRequest_WhenNameIsDuplicated() throws Exception {
+		ProviderDTO newProviderDTO = new ProviderDTO(null,"Sitjar","France");
+		Mockito.when(providerService.addProvider(Mockito.any(ProviderDTO.class)))
+				.thenThrow(new DuplicateProviderName("The provider name is already in use"));
+		mockMvc.perform(post("/providers")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(newProviderDTO)))
+				.andExpect(status().isBadRequest());
 	}
 }
