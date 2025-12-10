@@ -10,6 +10,8 @@ public record FruitDTO (
 		@NotNull(message = "Name can't be null")
 		String name,
 		@Positive(message = "weight has to be bigger than zero")
-		int weightInKilos
+		int weightInKilos,
+		@NotNull(message = "Provider can't be null")
+		Long providerId
 ){
 }

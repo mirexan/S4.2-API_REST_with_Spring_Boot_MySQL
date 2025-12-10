@@ -1,8 +1,6 @@
 package cat.itacademy.s04.t02.n02.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,9 +16,13 @@ public class Fruit{
 		String name;
 		@Setter
 		int weightInKilos;
-	public Fruit(Long id,String name, int weightInKilos) {
+		@ManyToOne
+		@JoinColumn(name = "provider_id")
+		Provider provider;
+	public Fruit(Long id,String name, int weightInKilos, Provider provider) {
 		this.id = id;
 		this.name = name;
 		this.weightInKilos = weightInKilos;
+		this.provider = provider;
 	}
 }
