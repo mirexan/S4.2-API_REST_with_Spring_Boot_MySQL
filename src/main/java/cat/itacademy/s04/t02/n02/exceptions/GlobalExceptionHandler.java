@@ -15,4 +15,8 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> handleProviderNotFoundException(ProviderNotFoundException ex){
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 	}
+	@ExceptionHandler(DuplicateProviderName.class)
+	public ResponseEntity<String> handleDuplicateProviderName(DuplicateProviderName ex){
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+	}
 }

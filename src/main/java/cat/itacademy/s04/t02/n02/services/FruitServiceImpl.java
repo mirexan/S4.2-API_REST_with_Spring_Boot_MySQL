@@ -49,7 +49,7 @@ public FruitServiceImpl(FruitRepository fruitRepository, ProviderRepository prov
 	public List<FruitDTO> getAllFruits() {
 	return fruitRepository.findAll()
 			.stream()
-			.map(fruit -> fruitToFruitDTO(fruit))
+			.map(this::fruitToFruitDTO)
 			.toList();
 	}
 	public List<FruitDTO> getFruitsByProviderId(Long providerId) {

@@ -9,6 +9,5 @@ public interface ProviderService {
 	ProviderDTO addProvider(ProviderDTO provider);
 	List<ProviderDTO> getAllProviders();
 	ProviderDTO updateProviderById(long id, ProviderDTO newProviderDTO);
-	List<FruitDTO> listFruitsFromProviderId(long id);
 	void deleteProviderById(long id);
 }

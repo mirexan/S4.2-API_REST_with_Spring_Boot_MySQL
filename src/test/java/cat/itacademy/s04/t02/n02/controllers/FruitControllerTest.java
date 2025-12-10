@@ -2,8 +2,6 @@ package cat.itacademy.s04.t02.n02.controllers;
 
 import cat.itacademy.s04.t02.n02.exceptions.FruitNotFoundException;
 import cat.itacademy.s04.t02.n02.model.FruitDTO;
-import cat.itacademy.s04.t02.n02.model.Provider;
-import cat.itacademy.s04.t02.n02.model.ProviderDTO;
 import cat.itacademy.s04.t02.n02.services.FruitService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +35,7 @@ public class FruitControllerTest {
 	}
 
 	@Test
-	void newFruitRegister_ShouldReturnOK_WhenDataIsValid() throws Exception {
+	void newFruitRegister_ShouldReturnCreated_WhenDataIsValid() throws Exception {
 		FruitDTO newFruitDTO = new FruitDTO(null, "Apple", 2,1L);
 		Mockito.when(fruitService.addFruit(Mockito.any(FruitDTO.class)))
 				.thenReturn(new FruitDTO(1L, "Apple", 2,1L));
