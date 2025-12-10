@@ -90,6 +90,16 @@ public class FruitControllerTest {
 				.andExpect(jsonPath("$[0].providerId").value(1L));
 	}
 	@Test
+	void getFruitsByProviderId_ShouldReturnNotFound_WhenProviderIdDoesNotExists() throws Exception {
+		FruitDTO newFruitDTO = new FruitDTO(2L, "banana", 2, 1L);
+		Mockito.when(fruitService.getFruitsByProviderId(1L))
+				.thenThrow(new ProviderNotFoundException("Provider with id "
+						+ newFruitDTO.providerId() + " does not exist"));
+		mockMvc.perform(get("/fruits")
+						.param("providerId", "1"))
+				.andExpect(status().isNotFound());
+	}
+	@Test
 	void getFruitById_ShouldReturnOK_WhenIdExists() throws Exception {
 		Mockito.when(fruitService.getFruitById(1L)).thenReturn(fruitDTO);
 		mockMvc.perform(get("/fruits/{id}", 1L))

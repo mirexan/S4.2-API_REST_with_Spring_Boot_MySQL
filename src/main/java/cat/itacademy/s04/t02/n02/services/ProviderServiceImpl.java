@@ -24,7 +24,7 @@ public class ProviderServiceImpl implements ProviderService {
 				provider.getCountry()
 		);
 	}
-	public ProviderDTO addProvider(ProviderDTO providerDTO){
+	public void duplicateProviderNameCheck(ProviderDTO providerDTO) {
 		Provider duplicateProvider = providerRepository.findAll()
 				.stream()
 				.filter(provider -> provider.getName().equalsIgnoreCase(providerDTO.name()))
@@ -32,6 +32,9 @@ public class ProviderServiceImpl implements ProviderService {
 		if(duplicateProvider != null){
 			throw new DuplicateProviderName("Provider with name " + providerDTO.name() + " already exists");
 		}
+	}
+	public ProviderDTO addProvider(ProviderDTO providerDTO){
+		duplicateProviderNameCheck(providerDTO);
 		Provider newProvider = providerRepository.save(new Provider(
 				null,
 				providerDTO.name(),
@@ -47,6 +50,7 @@ public class ProviderServiceImpl implements ProviderService {
 	public ProviderDTO updateProviderById(long id, ProviderDTO newProviderDTO){
 		Provider foundProvider = providerRepository.findById(id)
 				.orElseThrow(()-> new ProviderNotFoundException("Provider with id " + id + " not found"));
+		duplicateProviderNameCheck(newProviderDTO);
 		foundProvider.setName(newProviderDTO.name());
 		foundProvider.setCountry(newProviderDTO.country());
 		return providerToProviderDTO(providerRepository.save(foundProvider));
