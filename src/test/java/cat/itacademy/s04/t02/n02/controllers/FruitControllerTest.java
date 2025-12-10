@@ -1,6 +1,7 @@
 package cat.itacademy.s04.t02.n02.controllers;
 
 import cat.itacademy.s04.t02.n02.exceptions.FruitNotFoundException;
+import cat.itacademy.s04.t02.n02.exceptions.ProviderNotFoundException;
 import cat.itacademy.s04.t02.n02.model.FruitDTO;
 import cat.itacademy.s04.t02.n02.services.FruitService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,6 +57,18 @@ public class FruitControllerTest {
 	}
 
 	@Test
+	void newFruitRegister_ShouldReturnProviderNotFound_WhenProviderIdDoesNotExist() throws Exception {
+		FruitDTO newFruitDTO = new FruitDTO(null, "banana", 2,4L);
+		Mockito.when(fruitService.addFruit(Mockito.any(FruitDTO.class)))
+						.thenThrow(new ProviderNotFoundException("Provider with id "
+								+ newFruitDTO.providerId() + " does not exist"));
+		mockMvc.perform(post("/fruits")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(newFruitDTO)))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
 	void getAllFruits_ShouldReturnOK_WhenListIsNotEmpty() throws Exception {
 		Mockito.when(fruitService.getAllFruits()).thenReturn(List.of(fruitDTO));
 		mockMvc.perform(get("/fruits"))
@@ -67,7 +80,15 @@ public class FruitControllerTest {
 		mockMvc.perform(get("/fruits"))
 				.andExpect(status().isOk());
 	}
-
+	@Test
+	void getFruitsByProviderId_ShouldReturnOK_WhenProviderIdExists() throws Exception {
+		FruitDTO newFruitDTO = new FruitDTO(2L, "banana", 2, 1L);
+		Mockito.when(fruitService.getFruitsByProviderId(1L)).thenReturn(List.of(newFruitDTO));
+		mockMvc.perform(get("/fruits")
+						.param("providerId", "1"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].providerId").value(1L));
+	}
 	@Test
 	void getFruitById_ShouldReturnOK_WhenIdExists() throws Exception {
 		Mockito.when(fruitService.getFruitById(1L)).thenReturn(fruitDTO);

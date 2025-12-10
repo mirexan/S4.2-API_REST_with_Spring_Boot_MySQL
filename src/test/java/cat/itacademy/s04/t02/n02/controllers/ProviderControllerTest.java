@@ -51,4 +51,5 @@ public class ProviderControllerTest {
 						.content(objectMapper.writeValueAsString(newProviderDTO)))
 				.andExpect(status().isBadRequest());
 	}
+
 }
