@@ -13,11 +13,11 @@ import lombok.Setter;
 public class Provider {
 	@Id
 	@GeneratedValue
-	Long id;
+	private Long id;
 	@Setter
-	String name;
+	private String name;
 	@Setter
-	String country;
+	private String country;
 
 	public Provider(Long id, String name, String country) {
 		this.id = id;

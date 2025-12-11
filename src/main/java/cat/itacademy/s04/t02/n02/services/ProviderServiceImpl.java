@@ -62,7 +62,7 @@ public class ProviderServiceImpl implements ProviderService {
 	public void deleteProviderById(long id){
 		Provider foundProvider = providerRepository.findById(id)
 				.orElseThrow(()-> new ProviderNotFoundException("Provider with id " + id + " not found"));
-		if (fruitRepository.fruitsExistsByProviderId(id)) {
+		if (fruitRepository.existsByProviderId(id)) {
 			throw new ProviderHasFruitsException("Cannot delete provider with id " + id + " because it has associated fruits.");
 		}
 		providerRepository.delete(foundProvider);

@@ -10,15 +10,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Fruit{
 		@Id
-		@GeneratedValue
-		Long id;
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
+		private Long id;
 		@Setter
-		String name;
+		private String name;
 		@Setter
-		int weightInKilos;
+		private int weightInKilos;
 		@ManyToOne
 		@JoinColumn(name = "provider_id")
-		Provider provider;
+		private Provider provider;
 	public Fruit(Long id,String name, int weightInKilos, Provider provider) {
 		this.id = id;
 		this.name = name;

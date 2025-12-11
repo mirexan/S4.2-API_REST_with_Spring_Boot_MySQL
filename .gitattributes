@@ -1,2 +1,5 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+docker-compose.yml txt eol=lf
+Dockerfile txt eol=lf
+application.properties txt eol=lf
